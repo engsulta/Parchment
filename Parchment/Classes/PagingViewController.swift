@@ -341,9 +341,15 @@ open class PagingViewController:
     if let previouslySelected = state.currentPagingItem,
       let pagingItem = updatedItems.first(where: { $0.isEqual(to: previouslySelected) }) {
       pagingController.reloadMenu(around: pagingItem)
-    } else if let firstItem = updatedItems.first {
-      pagingController.reloadMenu(around: firstItem)
-    } else {
+    } else if let firstItem = updatedItems.first, updatedItems.count > 1 {
+        if state.currentPagingItem?.isEqual(to: firstItem) ?? false {
+            pagingController.reloadMenu(around: firstItem)
+        } else {
+            pagingController.reloadMenu(around: updatedItems[1])
+        }
+    }else if let firstItem = updatedItems.first {
+        pagingController.reloadMenu(around: firstItem)
+    }else {
       pagingController.removeAll()
     }
   }
